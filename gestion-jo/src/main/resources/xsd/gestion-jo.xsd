@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://gestion.jo.sn/soap"
+           targetNamespace="http://gestion.jo.sn/soap"
+           elementFormDefault="qualified">
+
+    <!-- ===== Operation 1 : consulter un athlete par id ===== -->
+
+    <xs:element name="getAthleteRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getAthleteResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="athlete" type="tns:athlete"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="athlete">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="nom" type="xs:string"/>
+            <xs:element name="prenom" type="xs:string"/>
+            <xs:element name="sexe" type="xs:string"/>
+            <xs:element name="nationalite" type="xs:string"/>
+            <xs:element name="discipline" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- ===== Operation 2 : consulter le tableau des medailles ===== -->
+
+    <xs:element name="getTableauMedaillesRequest">
+        <xs:complexType>
+            <xs:sequence/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getTableauMedaillesResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="ligne" type="tns:ligneMedaille" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="ligneMedaille">
+        <xs:sequence>
+            <xs:element name="pays" type="xs:string"/>
+            <xs:element name="or" type="xs:long"/>
+            <xs:element name="argent" type="xs:long"/>
+            <xs:element name="bronze" type="xs:long"/>
+            <xs:element name="total" type="xs:long"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>
