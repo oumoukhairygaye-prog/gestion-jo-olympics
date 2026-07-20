@@ -1,60 +1,60 @@
-# Gestion JO – Plateforme de Gestion des Jeux Olympiques
+# Gestion JO - Plateforme de Gestion des Jeux Olympiques
 
-Squelette de départ (Spring Boot 3 / Java 17) pour le projet Web Services : API REST + Web Service SOAP + documentation OpenAPI/Swagger.
+Plateforme developpee avec Spring Boot 3 / Java 17 dans le cadre de l'examen Web Services (JO de Dakar). Elle expose une API REST complete pour les applications web/mobiles, ainsi qu'un Web Service SOAP pour le systeme d'information historique, avec documentation OpenAPI/Swagger.
 
-## Architecture du dossier
+## Architecture du projet
 
-```
-src/main/java/sn/jo/gestion/
- ├── entity/       → Athlete, Discipline, Epreuve, Resultat, Pays, enums (Sexe, TypeMedaille)
- ├── repository/   → interfaces Spring Data JPA (accès DB)
- ├── service/      → (à créer) logique métier : médailles, dashboard, recherche multicritère
- ├── controller/   → (à créer) contrôleurs REST (@RestController)
- ├── dto/          → (à créer) objets de transfert (requêtes/réponses)
- └── config/       → (à créer) config SOAP (Spring-WS), OpenAPI, CORS...
-```
-
-## Prérequis
-
-- JDK 17+
-- Maven 3.8+ (ou utilise le wrapper `./mvnw` une fois généré)
-- PostgreSQL installé, avec une base créée :
-  ```sql
-  CREATE DATABASE jo_db;
-  ```
-
-## Démarrer le projet
-
-1. Adapte `src/main/resources/application.properties` avec ton user/mot de passe PostgreSQL.
-2. Compile et lance :
-   ```bash
-   mvn spring-boot:run
-   ```
-3. L'API démarre sur `http://localhost:8080`.
-4. La doc Swagger sera accessible sur `http://localhost:8080/swagger-ui.html` (une fois les contrôleurs créés).
-
-> Remarque : les tables sont créées automatiquement au démarrage grâce à `spring.jpa.hibernate.ddl-auto=update`.
-
-## Ce qui est déjà en place
-
-- **Entités JPA** : Athlete, Discipline, Epreuve, Resultat, Pays + enums Sexe et TypeMedaille.
-- **Repositories** de base pour chaque entité, avec quelques méthodes de recherche (par discipline, par date, etc.).
-- `Resultat.attribuerMedaille()` : logique simple d'attribution automatique de médaille selon le classement (1 → OR, 2 → ARGENT, 3 → BRONZE).
-
-## Prochaines étapes (à faire)
-
-1. Créer les DTOs (ne jamais exposer directement les entités JPA dans l'API).
-2. Créer les contrôleurs REST CRUD pour Athlete, Discipline, Epreuve.
-3. Créer le service Resultat (enregistrement + attribution médailles + podium).
-4. Créer l'endpoint Tableau des médailles (tri par or > argent > bronze).
-5. Créer les endpoints Dashboard (stats).
-6. Créer le Web Service SOAP avec Spring-WS (XSD + endpoint).
-7. Générer/valider la doc Swagger.
-8. Écrire les tests et exporter la collection Postman.
+- entity/ : Athlete, Discipline, Epreuve, Resultat, Pays, enums (Sexe, TypeMedaille)
+- repository/ : interfaces Spring Data JPA (acces base de donnees)
+- dto/ : objets de transfert (requetes/reponses de l'API REST)
+- service/ : logique metier (CRUD, medailles, dashboard, recherche multicritere)
+- controller/ : controleurs REST
+- specification/ : recherche multicritere dynamique
+- exception/ : gestion centralisee des erreurs (404, 400...)
+- config/ : configuration du Web Service SOAP (Spring-WS)
+- soap/ : endpoints SOAP (AthleteEndpoint, MedailleEndpoint)
+- resources/xsd/gestion-jo.xsd : contrat du Web Service SOAP
 
 ## Technologies
 
 - Spring Boot 3.3 (Web, Data JPA, Validation, Web Services)
-- PostgreSQL
+- MySQL (via XAMPP)
 - springdoc-openapi (Swagger UI)
+- Spring-WS + JAXB (Web Service SOAP)
 - Lombok
+
+## Prerequis
+
+- JDK 17+
+- Maven 3.8+
+- MySQL (ex. via XAMPP), avec une base creee : jo_db (creee automatiquement au demarrage)
+
+## Demarrer le projet
+
+1. Demarrer MySQL (ex. via le panneau de controle XAMPP).
+2. Adapter si besoin src/main/resources/application.properties (utilisateur/mot de passe MySQL).
+3. Compiler et lancer : mvn spring-boot:run
+4. L'API demarre sur http://localhost:8080
+
+## Documentation API REST (Swagger)
+
+Une fois l'application demarree : http://localhost:8080/swagger-ui.html
+
+## Web Service SOAP
+
+- WSDL : http://localhost:8080/ws/gestionJo.wsdl
+- Operations disponibles : getAthlete (consultation d'un athlete), getTableauMedailles (tableau des medailles)
+
+## Fonctionnalites implementees
+
+1. Gestion des athletes : CRUD complet (PUT/PATCH/DELETE/GET) + recherche multicritere
+2. Gestion des disciplines : CRUD + consultation des athletes d'une discipline
+3. Gestion des epreuves : CRUD + recherche par date et discipline
+4. Gestion des resultats : enregistrement + attribution automatique des medailles + podium
+5. Tableau des medailles : classement or > argent > bronze
+6. Tableau de bord : statistiques globales (athletes, pays, medailles, classement par points)
+7. Web Service SOAP : consultation athlete et tableau des medailles
+
+## Auteur
+
+Oumou Khairy Gaye
