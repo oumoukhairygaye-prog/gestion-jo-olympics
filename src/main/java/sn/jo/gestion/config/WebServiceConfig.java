@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.ws.config.annotation.EnableWs;
-import org.springframework.ws.config.annotation.WsConfigurer;
+import org.springframework.ws.config.annotation.WsConfigurerAdapter;
 import org.springframework.ws.transport.http.MessageDispatcherServlet;
 import org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition;
 import org.springframework.xml.xsd.SimpleXsdSchema;
@@ -16,12 +16,11 @@ import org.springframework.xml.xsd.XsdSchema;
 
 @EnableWs
 @Configuration
-public class WebServiceConfig implements WsConfigurer {
+public class WebServiceConfig extends WsConfigurerAdapter {
 
     @Autowired
     private ApplicationContext applicationContext;
 
-    // Toutes les requetes SOAP passeront par /ws/*
     @Bean
     public ServletRegistrationBean<MessageDispatcherServlet> messageDispatcherServlet() {
         MessageDispatcherServlet servlet = new MessageDispatcherServlet();
@@ -30,7 +29,6 @@ public class WebServiceConfig implements WsConfigurer {
         return new ServletRegistrationBean<>(servlet, "/ws/*");
     }
 
-    // Convertit automatiquement les objets Java <-> XML SOAP
     @Bean
     public Jaxb2Marshaller marshaller() {
         Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
@@ -38,7 +36,6 @@ public class WebServiceConfig implements WsConfigurer {
         return marshaller;
     }
 
-    // Le WSDL sera accessible sur /ws/gestionJo.wsdl
     @Bean(name = "gestionJo")
     public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema gestionJoSchema) {
         DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
